@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+	<head>
+		<script src="/socket.io/socket.io.js"></script>
+		<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+		<style>
+			body{margin:0;}
+			.grid{padding:38px;margin:5px;float:left;border:1px solid #555;cursor:pointer;}
+			.grid:hover{background:#eee;}
+		</style>
+		<script>
+		  var color = "#"+((1<<24)*Math.random()|0).toString(16);
+
+		  $(function () {
+		    var socket = io();
+		    for(var i=0; i<80; i++){
+		    	$('.container').append('<p class="grid" id="grid-'+i+'"></div>');
+		    }	
+
+		    $('.grid').each(function(index,elm){
+		    	$(this).click(function(){
+		    		socket.emit('select grid', index, color);
+		    	});
+		    });
+
+		    socket.on('fill grid', function(index, user_color){
+		    	$('#grid-'+index).css({background:user_color});
+		    });
+		  });
+		</script>
+	</head>
+	<body>
+		<div class="container"></div>
+	</body>
+</html>
